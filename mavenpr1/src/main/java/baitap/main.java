@@ -30,8 +30,6 @@ public class main {
 
         double diemTongKet = tinhdiem.tinhDiem(sv);
         System.out.printf("| %-15s | %-25s | %-10s | %-15s |%n ", "Ma sv", "Ho ten", "Diem", "xep loai");
-        System.out.printf("| %-15s | %-25s | %-10s | %-15s |%n ", getmaSV, "Ho ten", "Diem", "xep loai");
-        System.out.println("Diem tong ket: " + diemTongKet);
-        System.out.println("Xep loai: " + tinhdiem.xepLoai(diemTongKet));
+        System.out.printf("| %-15s | %-25s | %-10s | %-15s |%n ", sv.getMaSV(), sv.getHoTen(), diemTongKet, tinhdiem.xepLoai(diemTongKet));
     }
 }
