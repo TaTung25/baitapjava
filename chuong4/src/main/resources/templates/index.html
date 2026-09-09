@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="${title}">Trang chủ</title>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f6f8;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 900px;
+                margin: 100px auto;
+                background-color: white;
+                padding: 50px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+
+            h1 {
+                color: #2c3e50;
+                margin-bottom: 15px;
+            }
+
+            .message {
+                color: #666;
+                font-size: 18px;
+                margin-bottom: 35px;
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 12px 25px;
+                background-color: #3498db;
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+                font-size: 16px;
+            }
+
+            .btn:hover {
+                background-color: #217dbb;
+            }
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <h1 th:text="${title}">
+                Hệ thống quản lý sinh viên
+            </h1>
+
+            <p class="message" th:text="${message}">
+                Chào mừng đến với Spring Boot
+            </p>
+
+            <a class="btn" th:href="@{/students}">
+                Xem danh sách sinh viên
+            </a>
+
+        </div>
+
+    </body>
+
+</html>
