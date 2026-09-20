@@ -26,6 +26,44 @@
                 <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addKHModal">+ Thêm Khách Hàng</button>
             </div>
 
+            <!-- ============ TÌM KIẾM KHÁCH HÀNG ============ -->
+            <form action="KhachHangServlet" method="get" class="filter-bar mb-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-7">
+                        <label class="form-label">Từ khóa</label>
+                        <input type="text" name="tuKhoa" class="form-control"
+                               placeholder="Tìm theo tên, số điện thoại, email hoặc địa chỉ..."
+                               value="<c:out value='${tuKhoa}'/>">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Sắp xếp</label>
+                        <select name="sapXep" class="form-select">
+                            <option value="moinhat" ${selectedSapXep == 'moinhat' ? 'selected' : ''}>Mới nhất</option>
+                            <option value="cunhat"  ${selectedSapXep == 'cunhat'  ? 'selected' : ''}>Cũ nhất</option>
+                            <option value="tenaz"   ${selectedSapXep == 'tenaz'   ? 'selected' : ''}>Tên A &rarr; Z</option>
+                            <option value="tenza"   ${selectedSapXep == 'tenza'   ? 'selected' : ''}>Tên Z &rarr; A</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary fw-bold w-100">
+                                <i class="bi bi-search me-1"></i>Tìm
+                            </button>
+                            <a href="KhachHangServlet" class="btn btn-outline-secondary" title="Xóa bộ lọc">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <c:if test="${dangLoc}">
+                <p class="text-muted small mb-3">
+                    <i class="bi bi-funnel-fill me-1"></i>Kết quả:
+                    <strong>${listKH.size()}</strong> khách hàng
+                </p>
+            </c:if>
+
             <div class="card table-modern border-0">
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
@@ -59,6 +97,13 @@
                                     </td>
                                 </tr>
                             </c:forEach>
+                            <c:if test="${empty listKH}">
+                                <tr>
+                                    <td colspan="6" class="empty-row">
+                                        Không tìm thấy khách hàng nào phù hợp.
+                                    </td>
+                                </tr>
+                            </c:if>
                         </tbody>
                     </table>
                 </div>

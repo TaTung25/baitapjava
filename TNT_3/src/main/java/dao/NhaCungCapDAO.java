@@ -41,6 +41,69 @@ public class NhaCungCapDAO {
         return list;
     }
 
+    /**
+     * Tìm kiếm nhà cung cấp theo tên, số điện thoại, email hoặc địa chỉ.
+     *
+     * @param tuKhoa từ khóa tìm kiếm, rỗng/null thì trả về toàn bộ danh sách
+     * @param sapXep tenaz | tenza | moinhat | cunhat
+     */
+    public List<NhaCungCap> searchNCC(String tuKhoa, String sapXep) {
+        List<NhaCungCap> list = new ArrayList<>();
+        boolean coTuKhoa = tuKhoa != null && !tuKhoa.trim().isEmpty();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT * FROM NhaCungCap WHERE TrangThai = 1 ");
+        if (coTuKhoa) {
+            sql.append("AND (TenNCC LIKE ? OR SoDienThoai LIKE ? OR Email LIKE ? OR DiaChi LIKE ?) ");
+        }
+        sql.append(menhDeSapXep(sapXep));
+
+        try (Connection conn = dbContext.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            if (coTuKhoa) {
+                String mau = "%" + tuKhoa.trim() + "%";
+                for (int i = 1; i <= 4; i++) {
+                    ps.setString(i, mau);
+                }
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new NhaCungCap(
+                            rs.getInt("MaNCC"),
+                            rs.getString("TenNCC"),
+                            rs.getString("DiaChi"),
+                            rs.getString("SoDienThoai"),
+                            rs.getString("Email"),
+                            rs.getBoolean("TrangThai")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /** Mệnh đề sắp xếp, chỉ nhận giá trị trong danh sách cho phép. */
+    private String menhDeSapXep(String sapXep) {
+        if (sapXep == null) {
+            return "ORDER BY MaNCC DESC";
+        }
+        switch (sapXep.trim().toLowerCase()) {
+            case "tenaz":
+                return "ORDER BY TenNCC ASC";
+            case "tenza":
+                return "ORDER BY TenNCC DESC";
+            case "cunhat":
+                return "ORDER BY MaNCC ASC";
+            case "moinhat":
+            default:
+                return "ORDER BY MaNCC DESC";
+        }
+    }
+
     public boolean insertNCC(NhaCungCap ncc) {
         String sql = "INSERT INTO NhaCungCap(TenNCC, DiaChi, SoDienThoai, Email, TrangThai) VALUES(?, ?, ?, ?, 1)";
         try (Connection conn = dbContext.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {

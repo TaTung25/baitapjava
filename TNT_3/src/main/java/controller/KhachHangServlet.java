@@ -30,13 +30,24 @@ public class KhachHangServlet extends HttpServlet {
             if (ok) {
                 response.sendRedirect("KhachHangServlet");
             } else {
-                // Khách hàng đã có Phiếu Xuất liên quan (ràng buộc khóa ngoại)
+                
                 response.sendRedirect("KhachHangServlet?error=coliendon");
             }
             return;
         }
 
-        request.setAttribute("listKH", khachHangDAO.getAllKhachHang());
+        String tuKhoa = request.getParameter("tuKhoa");
+        String sapXep = request.getParameter("sapXep");
+
+        if (tuKhoa != null || sapXep != null) {
+            request.setAttribute("listKH", khachHangDAO.searchKhachHang(tuKhoa, sapXep));
+            request.setAttribute("dangLoc", true);
+        } else {
+            request.setAttribute("listKH", khachHangDAO.getAllKhachHang());
+        }
+        request.setAttribute("tuKhoa", tuKhoa == null ? "" : tuKhoa);
+        request.setAttribute("selectedSapXep", sapXep == null ? "moinhat" : sapXep);
+
         request.getRequestDispatcher("khachhang/list.jsp").forward(request, response);
     }
 

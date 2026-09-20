@@ -1,5 +1,5 @@
 <%-- 
-    Document   : taikhoan_add
+    Document   : list
     Created on : Sep 8, 2026, 8:32:19 AM
     Author     : 56745654242453456656
 --%>
@@ -98,7 +98,6 @@
     </div>
 </div>
 
-<!-- Modal Sửa Tài Khoản -->
 <c:forEach items="${listUser}" var="u">
     <div class="modal fade" id="editUserModal${u.maNguoiDung}" tabindex="-1">
         <div class="modal-dialog">
@@ -152,7 +151,6 @@
     </div>
 </c:forEach>
 
-<!-- Modal Thêm Tài Khoản -->
 <div class="modal fade" id="addUserModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="tnt" uri="http://tnt.com/functions" %>
 <%@ include file="../includes/header.jsp" %>
 
 <div class="container-fluid py-4 px-4">
@@ -57,7 +58,7 @@
                                         <select name="maSP" class="form-select sp-select" required onchange="calculateRow(this)">
                                             <option value="">-- Chọn sản phẩm --</option>
                                             <c:forEach items="${listSP}" var="sp">
-                                                <option value="${sp.maSP}" data-stock="${sp.soLuong}" data-price="${sp.donGiaBan}">
+                                                <option value="${sp.maSP}" data-stock="${sp.soLuong}" data-price="${tnt:raw(sp.donGiaBan)}">
                                                     ${sp.tenSP} (Còn: ${sp.soLuong})
                                                 </option>
                                             </c:forEach>

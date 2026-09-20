@@ -40,6 +40,67 @@ public class KhachHangDAO {
         return list;
     }
 
+    /**
+     * Tìm kiếm khách hàng theo tên, số điện thoại, email hoặc địa chỉ.
+     *
+     * @param tuKhoa từ khóa tìm kiếm, rỗng/null thì trả về toàn bộ danh sách
+     * @param sapXep tenaz | tenza | moinhat | cunhat
+     */
+    public List<KhachHang> searchKhachHang(String tuKhoa, String sapXep) {
+        List<KhachHang> list = new ArrayList<>();
+        boolean coTuKhoa = tuKhoa != null && !tuKhoa.trim().isEmpty();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM KhachHang WHERE 1 = 1 ");
+        if (coTuKhoa) {
+            sql.append("AND (TenKH LIKE ? OR SoDienThoai LIKE ? OR Email LIKE ? OR DiaChi LIKE ?) ");
+        }
+        sql.append(menhDeSapXep(sapXep));
+
+        try (Connection conn = dbContext.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            if (coTuKhoa) {
+                String mau = "%" + tuKhoa.trim() + "%";
+                for (int i = 1; i <= 4; i++) {
+                    ps.setString(i, mau);
+                }
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new KhachHang(
+                            rs.getInt("MaKH"),
+                            rs.getString("TenKH"),
+                            rs.getString("SoDienThoai"),
+                            rs.getString("Email"),
+                            rs.getString("DiaChi")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /** Mệnh đề sắp xếp, chỉ nhận giá trị trong danh sách cho phép. */
+    private String menhDeSapXep(String sapXep) {
+        if (sapXep == null) {
+            return "ORDER BY MaKH DESC";
+        }
+        switch (sapXep.trim().toLowerCase()) {
+            case "tenaz":
+                return "ORDER BY TenKH ASC";
+            case "tenza":
+                return "ORDER BY TenKH DESC";
+            case "cunhat":
+                return "ORDER BY MaKH ASC";
+            case "moinhat":
+            default:
+                return "ORDER BY MaKH DESC";
+        }
+    }
+
     public boolean insertKhachHang(KhachHang kh) {
         String sql = "INSERT INTO KhachHang(TenKH, SoDienThoai, Email, DiaChi) VALUES(?, ?, ?, ?)";
         try (Connection conn = dbContext.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {

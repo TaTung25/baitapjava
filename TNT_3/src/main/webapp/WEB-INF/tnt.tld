@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="https://jakarta.ee/xml/ns/jakartaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-jsptaglibrary_3_1.xsd"
+        version="3.1">
+
+    <description>Bo ham dinh dang tien te VND dung chung cho he thong TNT</description>
+    <tlib-version>1.0</tlib-version>
+    <short-name>tnt</short-name>
+    <uri>http://tnt.com/functions</uri>
+
+    <function>
+        <description>Dinh dang tien te kem don vi: 1000000 -> 1.000.000 VND</description>
+        <name>vnd</name>
+        <function-class>util.TienTe</function-class>
+        <function-signature>java.lang.String vnd(double)</function-signature>
+        <example>${tnt:vnd(sp.donGiaBan)}</example>
+    </function>
+
+    <function>
+        <description>Dinh dang so co phan cach hang nghin: 1000000 -> 1.000.000</description>
+        <name>so</name>
+        <function-class>util.TienTe</function-class>
+        <function-signature>java.lang.String so(double)</function-signature>
+        <example>${tnt:so(sp.soLuong)}</example>
+    </function>
+
+    <function>
+        <description>Gia tri tho khong phan cach, dung cho input number va JavaScript</description>
+        <name>raw</name>
+        <function-class>util.TienTe</function-class>
+        <function-signature>java.lang.String raw(double)</function-signature>
+        <example>${tnt:raw(sp.donGiaBan)}</example>
+    </function>
+
+    <function>
+        <description>Dinh dang tien te kem dau cong tru</description>
+        <name>vndCoDau</name>
+        <function-class>util.TienTe</function-class>
+        <function-signature>java.lang.String vndCoDau(double)</function-signature>
+        <example>${tnt:vndCoDau(k.loiNhuan)}</example>
+    </function>
+
+    <function>
+        <description>Dinh dang phan tram: 12.3456 -> 12,35%</description>
+        <name>phanTram</name>
+        <function-class>util.TienTe</function-class>
+        <function-signature>java.lang.String phanTram(double)</function-signature>
+        <example>${tnt:phanTram(k.tangTruong)}</example>
+    </function>
+
+    <function>
+        <description>Rut gon so tien lon: 1500000 -> 1,5 Tr</description>
+        <name>rutGon</name>
+        <function-class>util.TienTe</function-class>
+        <function-signature>java.lang.String rutGon(double)</function-signature>
+        <example>${tnt:rutGon(tongDoanhThu)}</example>
+    </function>
+
+    <function>
+        <description>Rut gon so tien lon kem don vi: 1500000 -> 1,5 Tr VND</description>
+        <name>rutGonVnd</name>
+        <function-class>util.TienTe</function-class>
+        <function-signature>java.lang.String rutGonVnd(double)</function-signature>
+        <example>${tnt:rutGonVnd(tongDoanhThu)}</example>
+    </function>
+
+</taglib>

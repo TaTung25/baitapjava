@@ -17,7 +17,6 @@
             <h3 class="fw-bold mb-4">Tài Khoản Cá Nhân</h3>
 
             <div class="row g-4">
-                <!-- Thông tin tài khoản -->
                 <div class="col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 h-100">
                         <div class="card-header bg-dark text-white fw-bold py-3">
@@ -26,10 +25,10 @@
                         <div class="card-body p-4">
                             <c:if test="${not empty error}">
                                 <div class="alert alert-danger py-2 mb-3"><i class="bi bi-exclamation-triangle-fill me-1"></i>${error}</div>
-                            </c:if>
-                            <c:if test="${not empty success}">
+                                </c:if>
+                                <c:if test="${not empty success}">
                                 <div class="alert alert-success py-2 mb-3"><i class="bi bi-check-circle-fill me-1"></i>${success}</div>
-                            </c:if>
+                                </c:if>
 
                             <form action="${pageContext.request.contextPath}/ProfileServlet" method="post">
                                 <input type="hidden" name="action" value="updateInfo">
@@ -61,7 +60,6 @@
                     </div>
                 </div>
 
-                <!-- Đổi mật khẩu -->
                 <div class="col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 h-100">
                         <div class="card-header bg-dark text-white fw-bold py-3">
@@ -70,10 +68,10 @@
                         <div class="card-body p-4">
                             <c:if test="${not empty errorPass}">
                                 <div class="alert alert-danger py-2 mb-3"><i class="bi bi-exclamation-triangle-fill me-1"></i>${errorPass}</div>
-                            </c:if>
-                            <c:if test="${not empty successPass}">
+                                </c:if>
+                                <c:if test="${not empty successPass}">
                                 <div class="alert alert-success py-2 mb-3"><i class="bi bi-check-circle-fill me-1"></i>${successPass}</div>
-                            </c:if>
+                                </c:if>
 
                             <form action="${pageContext.request.contextPath}/ProfileServlet" method="post">
                                 <input type="hidden" name="action" value="changePassword">

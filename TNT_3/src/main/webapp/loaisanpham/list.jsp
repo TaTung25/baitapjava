@@ -58,7 +58,6 @@
     </div>
 </div>
 
-<!-- Modal Sửa Loại Sản Phẩm -->
 <c:forEach items="${listLoai}" var="l">
     <div class="modal fade" id="editLoaiModal${l.maLoai}" tabindex="-1">
         <div class="modal-dialog">

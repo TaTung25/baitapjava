@@ -43,19 +43,34 @@ public class SanPhamServlet extends HttpServlet {
                 return;
 
             case "search":
-                String keyword = request.getParameter("keyword");
-                int maLoai = 0;
-                if (request.getParameter("maLoai") != null && !request.getParameter("maLoai").isEmpty()) {
-                    maLoai = Integer.parseInt(request.getParameter("maLoai"));
+                // Lọc + tìm kiếm nâng cao
+                String tuKhoa = request.getParameter("tuKhoa");
+                if (tuKhoa == null) {
+                    tuKhoa = request.getParameter("keyword"); // tương thích link cũ
                 }
-                request.setAttribute("listSP", sanPhamDAO.searchSanPham(keyword, maLoai));
-                request.setAttribute("keyword", keyword);
+                int maLoai = docSo(request.getParameter("maLoai"));
+                int maNCC = docSo(request.getParameter("maNCC"));
+                String tinhTrang = request.getParameter("tinhTrang");
+                String sapXep = request.getParameter("sapXep");
+
+                request.setAttribute("listSP",
+                        sanPhamDAO.locSanPham(tuKhoa, maLoai, maNCC, tinhTrang, sapXep));
+                request.setAttribute("tuKhoa", tuKhoa == null ? "" : tuKhoa);
                 request.setAttribute("selectedLoai", maLoai);
+                request.setAttribute("selectedNCC", maNCC);
+                request.setAttribute("selectedTinhTrang", tinhTrang == null ? "" : tinhTrang);
+                request.setAttribute("selectedSapXep", sapXep == null ? "moinhat" : sapXep);
+                request.setAttribute("dangLoc", true);
                 break;
 
             case "list":
             default:
                 request.setAttribute("listSP", sanPhamDAO.getAllSanPham());
+                request.setAttribute("tuKhoa", "");
+                request.setAttribute("selectedLoai", 0);
+                request.setAttribute("selectedNCC", 0);
+                request.setAttribute("selectedTinhTrang", "");
+                request.setAttribute("selectedSapXep", "moinhat");
                 break;
         }
 
@@ -92,5 +107,17 @@ public class SanPhamServlet extends HttpServlet {
         }
 
         response.sendRedirect("SanPhamServlet");
+    }
+
+    /** Đọc tham số số nguyên, trả về 0 nếu rỗng hoặc sai định dạng. */
+    private int docSo(String giaTri) {
+        if (giaTri == null || giaTri.trim().isEmpty()) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(giaTri.trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }

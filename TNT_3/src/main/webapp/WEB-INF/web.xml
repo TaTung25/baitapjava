@@ -11,4 +11,12 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
+    <!-- Khai báo thư viện hàm định dạng tiền tệ dùng chung (util.TienTe) -->
+    <jsp-config>
+        <taglib>
+            <taglib-uri>http://tnt.com/functions</taglib-uri>
+            <taglib-location>/WEB-INF/tnt.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>

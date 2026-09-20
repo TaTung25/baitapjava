@@ -15,16 +15,14 @@
             <%@ include file="includes/sidebar.jsp" %>
         </div>
 
-        <!-- Main Workspace -->
         <div class="col-lg-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h3 class="fw-bold mb-1">Tổng Quan Kho Hàng</h3>
-                    <p class="text-muted small mb-0">Thống kê dữ liệu thời gian thực Công ty TNT</p>
+                    <p class="text-muted small mb-0">Thống kê dữ liệu Công ty TNT</p>
                 </div>
             </div>
 
-            <!-- Stats Metric Cards -->
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <div class="card card-metric p-3">
@@ -72,10 +70,9 @@
                 </div>
             </div>
 
-            <!-- Low Stock Warning Table -->
             <div class="card table-modern border-0">
                 <div class="card-header bg-white py-3 border-0 d-flex align-items-center justify-content-between">
-                    <h5 class="fw-bold mb-0 text-danger"><i class="bi bi-bell-fill me-2"></i>Sản Phẩm Cần Bổ Sung Tồn Kho (<= 5)</h5>
+                    <h5 class="fw-bold mb-0 text-danger"><i class="bi bi-bell-fill me-2"></i>Sản Phẩm Cần Bổ Sung Tồn Kho</h5>
                     <a href="PhieuNhapServlet?action=create" class="btn btn-sm btn-primary fw-semibold">+ Tạo Phiếu Nhập</a>
                 </div>
                 <div class="table-responsive">

@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="tnt" uri="http://tnt.com/functions" %>
 <%@ include file="../includes/header.jsp" %>
 
 <div class="container-fluid py-4 px-4">
@@ -20,6 +21,76 @@
                     <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addSPModal">+ Thêm Sản Phẩm</button>
                 </c:if>
             </div>
+
+            <!-- ============ BỘ LỌC / TÌM KIẾM SẢN PHẨM ============ -->
+            <form action="SanPhamServlet" method="get" class="filter-bar mb-4">
+                <input type="hidden" name="action" value="search">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Từ khóa</label>
+                        <input type="text" name="tuKhoa" class="form-control"
+                               placeholder="Tên SP, hãng, cấu hình..."
+                               value="<c:out value='${tuKhoa}'/>">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Loại sản phẩm</label>
+                        <select name="maLoai" class="form-select">
+                            <option value="0">Tất cả loại</option>
+                            <c:forEach items="${listLoai}" var="l">
+                                <option value="${l.maLoai}" ${selectedLoai == l.maLoai ? 'selected' : ''}>${l.tenLoai}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Nhà cung cấp</label>
+                        <select name="maNCC" class="form-select">
+                            <option value="0">Tất cả NCC</option>
+                            <c:forEach items="${listNCC}" var="n">
+                                <option value="${n.maNCC}" ${selectedNCC == n.maNCC ? 'selected' : ''}>${n.tenNCC}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Tình trạng tồn</label>
+                        <select name="tinhTrang" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="connhieu" ${selectedTinhTrang == 'connhieu' ? 'selected' : ''}>Còn nhiều (&ge; 20)</option>
+                            <option value="conhang"  ${selectedTinhTrang == 'conhang'  ? 'selected' : ''}>Còn hàng (&gt; 5)</option>
+                            <option value="saphet"   ${selectedTinhTrang == 'saphet'   ? 'selected' : ''}>Sắp hết (1 - 5)</option>
+                            <option value="het"      ${selectedTinhTrang == 'het'      ? 'selected' : ''}>Hết hàng</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Sắp xếp</label>
+                        <select name="sapXep" class="form-select">
+                            <option value="moinhat"  ${selectedSapXep == 'moinhat'  ? 'selected' : ''}>Mới nhất</option>
+                            <option value="tenaz"    ${selectedSapXep == 'tenaz'    ? 'selected' : ''}>Tên A &rarr; Z</option>
+                            <option value="tenza"    ${selectedSapXep == 'tenza'    ? 'selected' : ''}>Tên Z &rarr; A</option>
+                            <option value="giagiam"  ${selectedSapXep == 'giagiam'  ? 'selected' : ''}>Giá cao &rarr; thấp</option>
+                            <option value="giatang"  ${selectedSapXep == 'giatang'  ? 'selected' : ''}>Giá thấp &rarr; cao</option>
+                            <option value="tonnhieu" ${selectedSapXep == 'tonnhieu' ? 'selected' : ''}>Tồn nhiều nhất</option>
+                            <option value="tonit"    ${selectedSapXep == 'tonit'    ? 'selected' : ''}>Tồn ít nhất</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary fw-bold w-100" title="Tìm kiếm">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <a href="SanPhamServlet" class="btn btn-outline-secondary" title="Xóa bộ lọc">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <c:if test="${dangLoc}">
+                <p class="text-muted small mb-3">
+                    <i class="bi bi-funnel-fill me-1"></i>Kết quả lọc:
+                    <strong>${listSP.size()}</strong> sản phẩm
+                </p>
+            </c:if>
 
             <div class="card table-modern border-0">
                 <div class="table-responsive">
@@ -44,8 +115,8 @@
                                     <td class="fw-bold text-primary">${sp.tenSP}</td>
                                     <td>${sp.tenLoai}</td>
                                     <td>${sp.tenNCC}</td>
-                                    <td>${sp.donGiaNhap} VNĐ</td>
-                                    <td>${sp.donGiaBan} VNĐ</td>
+                                    <td class="text-nowrap">${tnt:vnd(sp.donGiaNhap)}</td>
+                                    <td class="text-nowrap fw-semibold">${tnt:vnd(sp.donGiaBan)}</td>
                                     <td>
                                         <span class="badge ${sp.soLuong <= 5 ? 'bg-danger' : 'bg-success'} badge-stock">
                                             ${sp.soLuong}
@@ -66,6 +137,13 @@
                                     </td>
                                 </tr>
                             </c:forEach>
+                            <c:if test="${empty listSP}">
+                                <tr>
+                                    <td colspan="9" class="empty-row">
+                                        Không tìm thấy sản phẩm nào phù hợp với bộ lọc.
+                                    </td>
+                                </tr>
+                            </c:if>
                         </tbody>
                     </table>
                 </div>
@@ -74,7 +152,7 @@
     </div>
 </div>
 
-<!-- Modal Sửa Sản Phẩm (mỗi dòng 1 modal, điền sẵn dữ liệu) -->
+<!-- Modal Sửa Sản Phẩm -->
 <c:forEach items="${listSP}" var="sp">
     <div class="modal fade" id="editSPModal${sp.maSP}" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -125,11 +203,11 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Đơn Giá Nhập *</label>
-                                <input type="number" name="donGiaNhap" class="form-control" required step="1000" value="${sp.donGiaNhap}">
+                                <input type="number" name="donGiaNhap" class="form-control" required step="1000" value="${tnt:raw(sp.donGiaNhap)}">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Đơn Giá Bán *</label>
-                                <input type="number" name="donGiaBan" class="form-control" required step="1000" value="${sp.donGiaBan}">
+                                <input type="number" name="donGiaBan" class="form-control" required step="1000" value="${tnt:raw(sp.donGiaBan)}">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Số Lượng Tồn</label>

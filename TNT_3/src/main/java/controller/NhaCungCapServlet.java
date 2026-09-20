@@ -31,7 +31,18 @@ public class NhaCungCapServlet extends HttpServlet {
             return;
         }
 
-        request.setAttribute("listNCC", nhaCungCapDAO.getAllNCC());
+        String tuKhoa = request.getParameter("tuKhoa");
+        String sapXep = request.getParameter("sapXep");
+
+        if (tuKhoa != null || sapXep != null) {
+            request.setAttribute("listNCC", nhaCungCapDAO.searchNCC(tuKhoa, sapXep));
+            request.setAttribute("dangLoc", true);
+        } else {
+            request.setAttribute("listNCC", nhaCungCapDAO.getAllNCC());
+        }
+        request.setAttribute("tuKhoa", tuKhoa == null ? "" : tuKhoa);
+        request.setAttribute("selectedSapXep", sapXep == null ? "moinhat" : sapXep);
+
         request.getRequestDispatcher("nhacungcap/list.jsp").forward(request, response);
     }
 

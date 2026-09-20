@@ -48,8 +48,7 @@ public class ProfileServlet extends HttpServlet {
 
         request.getRequestDispatcher("canhan/profile.jsp").forward(request, response);
     }
-
-    // Cập nhật Họ Tên / Email / SĐT của chính tài khoản đang đăng nhập.
+    
     private void xuLyCapNhatThongTin(HttpServletRequest request, NguoiDung currentUser, HttpSession session) {
         String hoTen = request.getParameter("hoTen");
         String email = request.getParameter("email");

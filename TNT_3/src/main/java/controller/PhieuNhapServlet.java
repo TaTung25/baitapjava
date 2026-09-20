@@ -49,7 +49,7 @@ public class PhieuNhapServlet extends HttpServlet {
             request.setAttribute("listChiTiet", listCT);
             request.getRequestDispatcher("nhapkho/detail.jsp").forward(request, response);
         } else {
-            // Hiển thị danh sách tất cả phiếu nhập (allPhieuNhap)
+            // Hiển thị danh sách tất cả phiếu nhập 
             request.setAttribute("listPN", phieuNhapDAO.getAllPhieuNhap());
             request.getRequestDispatcher("nhapkho/list.jsp").forward(request, response);
         }

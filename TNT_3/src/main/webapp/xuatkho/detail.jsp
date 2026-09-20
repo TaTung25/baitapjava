@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="tnt" uri="http://tnt.com/functions" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ include file="../includes/header.jsp" %>
 
@@ -60,15 +61,15 @@
                                 <td class="ps-3 fw-semibold">#${ct.maSP}</td>
                                 <td class="fw-bold">${ct.tenSP}</td>
                                 <td><span class="badge bg-danger fs-6">${ct.soLuong}</span></td>
-                                <td>${ct.donGia} VNĐ</td>
-                                <td class="fw-bold text-success">${ct.thanhTien} VNĐ</td>
+                                <td class="text-nowrap">${tnt:vnd(ct.donGia)}</td>
+                                <td class="fw-bold text-success text-nowrap">${tnt:vnd(ct.thanhTien)}</td>
                             </tr>
                         </c:forEach>
                         </tbody>
                     </table>
                 </div>
                 <div class="card-footer bg-white p-3 text-end">
-                    <h4 class="fw-bold text-success mb-0">Tổng Doanh Thu Xuất Kho: ${phieuXuat.tongTien} VNĐ</h4>
+                    <h4 class="fw-bold text-success mb-0">Tổng Doanh Thu Xuất Kho: ${tnt:vnd(phieuXuat.tongTien)}</h4>
                 </div>
             </div>
         </div>

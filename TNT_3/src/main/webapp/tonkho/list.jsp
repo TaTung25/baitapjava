@@ -6,6 +6,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="tnt" uri="http://tnt.com/functions" %>
 <%@ include file="../includes/header.jsp" %>
 
 <div class="container-fluid py-4 px-4">
@@ -36,14 +37,14 @@
                                     <td class="fw-bold text-primary">${sp.tenSP}</td>
                                     <td>${sp.hangSX}</td>
                                     <td class="fw-bold fs-5">${sp.soLuong}</td>
-                                    <td>${sp.donGiaBan} VNĐ</td>
+                                    <td class="text-nowrap fw-semibold">${tnt:vnd(sp.donGiaBan)}</td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${sp.soLuong == 0}">
                                                 <span class="badge bg-dark">Hết hàng</span>
                                             </c:when>
                                             <c:when test="${sp.soLuong <= 5}">
-                                                <span class="badge bg-danger">Sắp hết (<=5)</span>
+                                                <span class="badge bg-danger">Sắp hết</span>
                                             </c:when>
                                             <c:otherwise>
                                                 <span class="badge bg-success">Còn hàng</span>

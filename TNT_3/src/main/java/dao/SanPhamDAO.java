@@ -96,6 +96,112 @@ public class SanPhamDAO {
         return list;
     }
 
+    // 3b. Lọc + tìm kiếm nâng cao sản phẩm
+    /**
+     * Tìm kiếm và lọc sản phẩm theo nhiều tiêu chí cùng lúc.
+     *
+     * @param tuKhoa    tìm trong tên sản phẩm, hãng sản xuất và mô tả (có thể null)
+     * @param maLoai    lọc theo loại sản phẩm, 0 = tất cả
+     * @param maNCC     lọc theo nhà cung cấp, 0 = tất cả
+     * @param tinhTrang het | saphet | conhang | connhieu | rỗng = tất cả
+     * @param sapXep    moinhat | tenaz | tenza | giatang | giagiam | tonnhieu | tonit
+     */
+    public List<SanPham> locSanPham(String tuKhoa, int maLoai, int maNCC,
+            String tinhTrang, String sapXep) {
+
+        List<SanPham> list = new ArrayList<>();
+        boolean coTuKhoa = tuKhoa != null && !tuKhoa.trim().isEmpty();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT sp.*, l.TenLoai, ncc.TenNCC FROM SanPham sp "
+                + "LEFT JOIN LoaiSanPham l ON sp.MaLoai = l.MaLoai "
+                + "LEFT JOIN NhaCungCap ncc ON sp.MaNCC = ncc.MaNCC "
+                + "WHERE sp.TrangThai = 1 "
+        );
+
+        if (coTuKhoa) {
+            sql.append("AND (sp.TenSP LIKE ? OR sp.HangSX LIKE ? OR sp.MoTa LIKE ?) ");
+        }
+        if (maLoai > 0) {
+            sql.append("AND sp.MaLoai = ? ");
+        }
+        if (maNCC > 0) {
+            sql.append("AND sp.MaNCC = ? ");
+        }
+        sql.append(dieuKienTinhTrang(tinhTrang));
+        sql.append(menhDeSapXep(sapXep));
+
+        try (Connection conn = dbContext.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int viTri = 1;
+            if (coTuKhoa) {
+                String mau = "%" + tuKhoa.trim() + "%";
+                ps.setString(viTri++, mau);
+                ps.setString(viTri++, mau);
+                ps.setString(viTri++, mau);
+            }
+            if (maLoai > 0) {
+                ps.setInt(viTri++, maLoai);
+            }
+            if (maNCC > 0) {
+                ps.setInt(viTri++, maNCC);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapResultSetToSanPham(rs));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /** Điều kiện lọc theo tình trạng tồn kho. Chỉ nhận giá trị trong danh sách cho phép. */
+    private String dieuKienTinhTrang(String tinhTrang) {
+        if (tinhTrang == null) {
+            return "";
+        }
+        switch (tinhTrang.trim().toLowerCase()) {
+            case "het":
+                return "AND sp.SoLuong = 0 ";
+            case "saphet":
+                return "AND sp.SoLuong > 0 AND sp.SoLuong <= 5 ";
+            case "conhang":
+                return "AND sp.SoLuong > 5 ";
+            case "connhieu":
+                return "AND sp.SoLuong >= 20 ";
+            default:
+                return "";
+        }
+    }
+
+    /** Mệnh đề sắp xếp. Chỉ nhận giá trị trong danh sách cho phép để tránh chèn SQL. */
+    private String menhDeSapXep(String sapXep) {
+        if (sapXep == null) {
+            return "ORDER BY sp.MaSP DESC";
+        }
+        switch (sapXep.trim().toLowerCase()) {
+            case "tenaz":
+                return "ORDER BY sp.TenSP ASC";
+            case "tenza":
+                return "ORDER BY sp.TenSP DESC";
+            case "giatang":
+                return "ORDER BY sp.DonGiaBan ASC";
+            case "giagiam":
+                return "ORDER BY sp.DonGiaBan DESC";
+            case "tonnhieu":
+                return "ORDER BY sp.SoLuong DESC";
+            case "tonit":
+                return "ORDER BY sp.SoLuong ASC";
+            case "moinhat":
+            default:
+                return "ORDER BY sp.MaSP DESC";
+        }
+    }
+
     // 4. Thêm mới sản phẩm
     public boolean insertSanPham(SanPham sp) {
         String sql = "INSERT INTO SanPham(TenSP, MaLoai, MaNCC, HangSX, DonViTinh, DonGiaNhap, DonGiaBan, SoLuong, BaoHanh, MoTa, TrangThai) "

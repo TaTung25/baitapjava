@@ -38,7 +38,6 @@ public class NguoiDungServlet extends HttpServlet {
             if ("delete".equals(action)) {
                 boolean ok = nguoiDungDAO.deleteNguoiDung(maNguoiDung);
                 if (!ok) {
-                    // Tài khoản đã lập Phiếu Nhập/Xuất (ràng buộc khóa ngoại)
                     response.sendRedirect("NguoiDungServlet?error=coliendon");
                     return;
                 }
@@ -76,7 +75,6 @@ public class NguoiDungServlet extends HttpServlet {
         }
 
         if (isUpdate) {
-            // Cập nhật tài khoản (Sửa + Phân quyền). Không đổi Tên Đăng Nhập.
             NguoiDung user = new NguoiDung();
             user.setMaNguoiDung(Integer.parseInt(maNguoiDungStr));
             user.setHoTen(hoTen);

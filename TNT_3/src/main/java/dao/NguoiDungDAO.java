@@ -179,10 +179,7 @@ public class NguoiDungDAO {
         }
         return false;
     }
-
-    // Xóa hẳn tài khoản. Nếu tài khoản đã lập Phiếu Nhập/Xuất, ràng buộc khóa
-    // ngoại sẽ khiến câu lệnh lỗi -> trả về false để Servlet báo nên Khóa
-    // tài khoản thay vì Xóa.
+    
     public boolean deleteNguoiDung(int maNguoiDung) {
         String sql = "DELETE FROM NguoiDung WHERE MaNguoiDung = ?";
         try (Connection conn = dbContext.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {

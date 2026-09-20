@@ -44,19 +44,11 @@ public class AuthFilter implements Filter {
         }
 
         String quyen = user.getQuyen();
-
-        // Phân quyền ADMIN: chặn cả JSP nằm trong /admin/ lẫn NguoiDungServlet
-        // (trang này forward tới admin/list.jsp nhưng URI request lại là
-        // /NguoiDungServlet nên phải kiểm tra riêng, không thể chỉ dựa vào "/admin/")
         boolean isAdminOnly = uri.contains("/admin/") || uri.endsWith("/NguoiDungServlet");
         if (isAdminOnly && !"ADMIN".equals(quyen)) {
             resp.sendRedirect(context + "/DashboardServlet?error=AccessDenied");
             return;
         }
-
-        // Phân quyền Danh mục (Loại SP, Khách hàng) & Báo cáo/Thống kê:
-        // chỉ ADMIN và QUANLY được truy cập; NHANVIENKHO không có quyền
-        // (đúng theo ma trận: "Không quản lý danh mục" / "Không có quyền xem" báo cáo).
         boolean isQuanLyOnly = uri.endsWith("/LoaiSanPhamServlet")
                 || uri.endsWith("/KhachHangServlet")
                 || uri.endsWith("/BaoCaoServlet");
@@ -64,11 +56,6 @@ public class AuthFilter implements Filter {
             resp.sendRedirect(context + "/DashboardServlet?error=AccessDenied");
             return;
         }
-
-        // Phân quyền Sản phẩm / Nhà cung cấp: NHANVIENKHO chỉ được XEM
-        // (list, search), không được thêm/sửa/xóa. Thêm/Sửa luôn đi bằng
-        // POST; Xóa đi bằng GET nhưng có action=delete, nên phải kiểm tra
-        // cả hai trường hợp thay vì chỉ chặn theo method.
         boolean isSanPhamOrNCC = uri.endsWith("/SanPhamServlet") || uri.endsWith("/NhaCungCapServlet");
         if (isSanPhamOrNCC && "NHANVIENKHO".equals(quyen)) {
             boolean isWriteAction = "POST".equalsIgnoreCase(req.getMethod())

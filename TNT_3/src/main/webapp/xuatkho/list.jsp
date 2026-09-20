@@ -1,11 +1,12 @@
 <%-- 
     Document   : list
-    Created on : Sep 8, 2026, 7:30:40 AM
+    Created on : Sep 15, 2026, 2:49:24 AM
     Author     : 56745654242453456656
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="tnt" uri="http://tnt.com/functions" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ include file="../includes/header.jsp" %>
 
@@ -41,7 +42,9 @@
                                     <td class="fw-bold text-primary">${px.tenKH}</td>
                                     <td>${px.tenNguoiDung}</td>
                                     <td><fmt:formatDate value="${px.ngayXuat}" pattern="dd/MM/yyyy HH:mm"/></td>
-                                    <td class="fw-bold text-success">${px.tongTien} VNĐ</td>
+                                    <td class="fw-bold text-success">
+                                        ${tnt:vnd(px.tongTien)}
+                                    </td>
                                     <td>${px.ghiChu}</td>
                                     <td class="text-center">
                                         <a href="PhieuXuatServlet?action=detail&id=${px.maPX}" class="btn btn-sm btn-outline-info">
